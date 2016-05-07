@@ -1,0 +1,89 @@
+; start cl-lib for auto-complete
+(add-to-list 'load-path "~/.emacs.d/cl-lib/")
+(require 'cl-lib)
+
+;start auto-complete
+(add-to-list 'load-path "~/.emacs.d/indep_mods")
+
+(setq c-default-style "linux"
+          c-basic-offset 4)
+(setq-default indent-tabs-mode nil)
+;(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
+;(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(require 'xcscope)
+(require 'cmake-mode)
+(require 'column-enforce-mode)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
+
+; Add cmake listfile names to the mode list.
+(setq auto-mode-alist
+	  (append
+	   '(("CMakeLists\\.txt\\'" . cmake-mode))
+	   '(("\\.cmake\\'" . cmake-mode))
+	   auto-mode-alist))
+
+
+; Set compilation environment
+(let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
+  (setenv "PATH" path)
+  (setq exec-path 
+        (append
+         (split-string-and-unquote path ":")
+         exec-path)))
+
+; Have it understand my aliases (sdk1, sdk2, sdk3)
+(setq shell-file-name "bash")
+(setq shell-command-switch "-ic")
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(add-to-list 'load-path "~/.emacs.d/emacs-ycmd")
+(require 'ycmd)
+;;(add-hook 'after-init-hook #'global-ycmd-mode)
+(set-variable 'ycmd-server-command '("python" "/home/jcubides/opensrc/ycmd/ycmd/"))
+(ycmd-setup)
+
+;; Add company-mode that actually sets the autocompletion with ycm
+(add-to-list 'load-path "~/.emacs.d/elpa/company-20150706.347/")
+(add-to-list 'load-path "~/.emacs.d/elpa/company-ycmd-20150514.534/company-ycmd/")
+(require 'company-ycmd)
+(company-ycmd-setup)
+(company-mode)
+
+;; Add the package manager and the repo melpa
+(require 'package) ;; You might already have this line
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize) ;; You might already have this line
+(put 'upcase-region 'disabled nil)
+
+(80-column-rule)
+
+;; initial window
+(setq initial-frame-alist
+      '(
+        (width . 166) ; character
+        (height . 54) ; lines
+        ))
+
+;; default/sebsequent window
+(setq default-frame-alist
+      '(
+        (width . 83) ; character
+        (height . 52) ; lines
+        ))
