@@ -1,3 +1,6 @@
+; Make sure that the right path is added
+(add-to-list 'load-path "~/.emacs.d/single_mods")
+
 ; start cl-lib for auto-complete
 (add-to-list 'load-path "~/.emacs.d/cl-lib/")
 (require 'cl-lib)
@@ -12,7 +15,6 @@
 ;(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (require 'xcscope)
-(require 'cmake-mode)
 (require 'column-enforce-mode)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -22,24 +24,12 @@
  '(default ((t (:inherit nil :stipple nil :background "black" :foreground "white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 83 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
 
 ; Add cmake listfile names to the mode list.
+(require 'cmake-mode)
 (setq auto-mode-alist
 	  (append
 	   '(("CMakeLists\\.txt\\'" . cmake-mode))
 	   '(("\\.cmake\\'" . cmake-mode))
 	   auto-mode-alist))
-
-
-; Set compilation environment
-(let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
-  (setenv "PATH" path)
-  (setq exec-path 
-        (append
-         (split-string-and-unquote path ":")
-         exec-path)))
-
-; Have it understand my aliases (sdk1, sdk2, sdk3)
-(setq shell-file-name "bash")
-(setq shell-command-switch "-ic")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -47,19 +37,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-(add-to-list 'load-path "~/.emacs.d/emacs-ycmd")
-(require 'ycmd)
-;;(add-hook 'after-init-hook #'global-ycmd-mode)
-(set-variable 'ycmd-server-command '("python" "/home/jcubides/opensrc/ycmd/ycmd/"))
-(ycmd-setup)
-
-;; Add company-mode that actually sets the autocompletion with ycm
-(add-to-list 'load-path "~/.emacs.d/elpa/company-20150706.347/")
-(add-to-list 'load-path "~/.emacs.d/elpa/company-ycmd-20150514.534/company-ycmd/")
-(require 'company-ycmd)
-(company-ycmd-setup)
-(company-mode)
 
 ;; Add the package manager and the repo melpa
 (require 'package) ;; You might already have this line
